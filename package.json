@@ -1,12 +1,11 @@
 {
-  "name": "base44-app",
-  "private": true,
+  
+  "name": "plant-analyzer",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -55,10 +54,12 @@
     "react-router-dom": "^7.2.0",
     "recharts": "^2.15.1",
     "sonner": "^2.0.1",
+    "lodash": "^4.17.21",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
     "zod": "^3.24.2"
+    
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
