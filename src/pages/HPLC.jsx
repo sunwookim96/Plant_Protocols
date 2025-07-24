@@ -78,7 +78,7 @@ export default function HPLC() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-6 sm:space-y-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-          <div className="text-center sm:text-left flex-1">
+          <div className="w-full text-center">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">HPLC 분석 프로토콜 선택</h1>
             <p className="text-sm sm:text-base text-gray-600">RT 기준을 입력하고 PDF 파일을 업로드하여 분석하세요.</p>
           </div>
