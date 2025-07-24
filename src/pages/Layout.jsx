@@ -1,53 +1,18 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Leaf, Home, TestTube, FlaskConical } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { createPageUrl } from "@/utils";
-import { Leaf, User as UserIcon, LogOut } from "lucide-react";
-import { User } from "@/api/entities";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    initializeUser();
-  }, []);
-
-  const initializeUser = async () => {
-    try {
-      const currentUser = await User.me();
-      setUser(currentUser);
-    } catch (error) {
-      // 사용자가 로그인하지 않은 경우 처리
-      console.log("사용자가 로그인하지 않았습니다.");
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await User.logout();
-      setUser(null);
-    } catch (error) {
-      console.error("로그아웃 중 오류가 발생했습니다:", error);
-    }
-  };
-
-  const getPageTitle = () => {
-    if (location.pathname.startsWith(createPageUrl("Results"))) {
-      return "데이터 분석 및 결과";
-    }
-    if (location.pathname.startsWith(createPageUrl("Analysis"))) {
-      return "분석 프로토콜";
-    }
-    return "Plant Biochemical Analysis";
-  };
+  // 현재 페이지 상태 확인 - 루트 경로도 홈으로 인식
+  const isHomePage = currentPageName.toLowerCase().includes("home") || location.pathname === "/";
+  const isResultsPage = currentPageName.includes("Results");
+  const isAnalysisPage = currentPageName.includes("Analysis");
+  const isHPLCPage = location.pathname.includes("HPLC");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -114,54 +79,100 @@ export default function Layout({ children, currentPageName }) {
         input[type=number] {
           -moz-appearance: textfield;
         }
+
+        /* Mobile responsive improvements */
+        @media (max-width: 640px) {
+          .ios-input {
+            font-size: 16px; /* Prevents zoom on iOS */
+            padding: 12px;
+          }
+        }
+
+        /* Navigation buttons */
+        .nav-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.8);
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          color: #6B7280;
+          transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+          background: rgba(0, 122, 255, 0.1);
+          color: #007AFF;
+        }
+        
+        .nav-button.active {
+          background: #007AFF;
+          color: white;
+        }
       `}</style>
 
-      <div className="relative z-10">
-        <header className="sticky top-0 z-50 ios-blur bg-white/80 border-b border-gray-200/60 ios-shadow">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-3">
-                <Link to={createPageUrl("Analysis")} className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center ios-shadow">
-                    <Leaf className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <h1 className="text-lg font-semibold text-gray-900 tracking-tight">PlantAnalyzer</h1>
-                    <p className="text-xs text-gray-500 font-medium">{getPageTitle()}</p>
-                  </div>
-                </Link>
-              </div>
+      <header className="relative z-10">
+        <div className="bg-white/80 backdrop-blur-lg ios-shadow border-b border-gray-200/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-4">
+              <Link 
+                to={createPageUrl("Home")} 
+                className="flex items-center space-x-3 group"
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <Leaf className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  Instrumental Analysis
+                </span>
+              </Link>
               
-              {user && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center space-x-2 h-10 rounded-xl">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                        <UserIcon className="h-4 w-4 text-blue-600" />
-                      </div>
-                      <span className="text-sm font-medium text-gray-700">{user.full_name}</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 ios-card ios-blur rounded-2xl ios-shadow-lg border-0 p-2">
-                    <div className="px-3 py-2 border-b border-gray-100 mb-2">
-                      <p className="text-sm font-medium text-gray-900">{user.full_name}</p>
-                      <p className="text-xs text-gray-500">{user.email}</p>
-                    </div>
-                    <DropdownMenuItem onClick={handleLogout} className="flex items-center space-x-2 rounded-xl p-3 text-red-600 hover:bg-red-50">
-                      <LogOut className="h-4 w-4" />
-                      <span>로그아웃</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+              <div className="flex items-center space-x-3">
+                {/* Navigation Buttons */}
+                <div className="hidden sm:flex items-center space-x-2">
+                  <Link 
+                    to={createPageUrl("Home")}
+                    className={`nav-button ${isHomePage ? 'active' : ''}`}
+                    title="홈"
+                  >
+                    <Home className="h-4 w-4" />
+                  </Link>
+                  <Link 
+                    to={createPageUrl("Analysis")}
+                    className={`nav-button ${isAnalysisPage ? 'active' : ''}`}
+                    title="흡광도"
+                  >
+                    <TestTube className="h-4 w-4" />
+                  </Link>
+                  <Link 
+                    to={createPageUrl("HPLC")}
+                    className={`nav-button ${isHPLCPage ? 'active' : ''}`}
+                    title="HPLC"
+                  >
+                    <FlaskConical className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <main className="relative">
-          {children}
-        </main>
-      </div>
+      <main className="relative">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+      </main>
     </div>
   );
 }

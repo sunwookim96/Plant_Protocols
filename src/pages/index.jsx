@@ -4,6 +4,12 @@ import Analysis from "./Analysis";
 
 import Results from "./Results";
 
+import Home from "./Home";
+
+import HPLC from "./HPLC";
+
+import HPLC_Results from "./HPLC_Results";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
@@ -11,6 +17,12 @@ const PAGES = {
     Analysis: Analysis,
     
     Results: Results,
+    
+    Home: Home,
+    
+    HPLC: HPLC,
+    
+    HPLC_Results: HPLC_Results,
     
 }
 
@@ -36,12 +48,18 @@ function PagesContent() {
         <Layout currentPageName={currentPage}>
             <Routes>            
                 
-                    <Route path="/" element={<Analysis />} />
+                    <Route path="/" element={<Home />} />
                 
                 
                 <Route path="/Analysis" element={<Analysis />} />
                 
                 <Route path="/Results" element={<Results />} />
+                
+                <Route path="/Home" element={<Home />} />
+                
+                <Route path="/HPLC" element={<HPLC />} />
+                
+                <Route path="/HPLC_Results" element={<HPLC_Results />} />
                 
             </Routes>
         </Layout>

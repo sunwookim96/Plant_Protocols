@@ -8,17 +8,17 @@ import { Plus } from "lucide-react";
 
 const getWavelengthsForAnalysis = (analysisType) => {
   const wavelengths = {
-    chlorophyll_a_b: ["665.2", "652.4"],
+    chlorophyll_a_b: ["665.2", "652.4", "470"],
     carotenoid: ["470", "665.2", "652.4"],
     total_phenol: ["765"],
     total_flavonoid: ["510"],
     glucosinolate: ["425"],
     dpph_scavenging: ["517"],
-    anthocyanin: ["530", "657"],
+    anthocyanin: ["530", "600"], // Changed from "657" to "600"
     cat: ["240"],
     pod: ["470"],
     sod: ["560"],
-    h2o2: ["390"]
+    h2o2: ["240"] // 과산화수소 프로토콜 수정: 390nm에서 240nm로 변경
   };
   return wavelengths[analysisType] || [];
 };
@@ -88,7 +88,7 @@ export default function ManualInput({ analysisType, onSaveSample }) {
                     <Input value={treatmentName} onChange={e => setTreatmentName(e.target.value)} placeholder="예: Control" className="ios-input border-0 text-gray-900 placeholder:text-gray-400" />
                 </div>
                 <div className="space-y-2">
-                    <Label className="text-gray-700 font-medium text-sm">샘플 이름</Label>
+                    <Label className="text-gray-700 font-medium text-sm">반복 수</Label>
                     <Input value={sampleName} onChange={e => setSampleName(e.target.value)} placeholder="예: Rep1" className="ios-input border-0 text-gray-900 placeholder:text-gray-400" />
                 </div>
             </div>
